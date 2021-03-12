@@ -13,24 +13,24 @@
 <body>
     <script src="resources/auth.js"></script>
 
-    <h2>Student Personal Cabinet</h2>
+    <h1 class="container-title">Student Personal Cabinet</h1>
     <div class="container" id="container">
+
         <div class="form-container sign-up-container">
-            <form action="#">
+            <form action="/studentCabinet/auth" method="POST">
                 <h1>Create Account</h1>
-                <input type="text" placeholder="Name" />
-                <input type="email" placeholder="Email" />
-                <input type="password" placeholder="Password" />
-                <button>Sign Up</button>
+                <input type="email" placeholder="Email" name="email" required/>
+                <input type="password" placeholder="Password" name="password" required/>
+                <button type="submit" name="buttonType" value="signUp" >Sign Up</button>
             </form>
         </div>
 
-        <div class="form-container sign-in-container">
+        <div class="form-container registration-container">
             <form action="/studentCabinet/auth" method="POST">
                 <h1>Sign in</h1>
-                <input type="email" placeholder="Email" name="username"/>
-                <input type="password" placeholder="Password" name="password"/>
-                <button>Sign In</button>
+                <input type="email" placeholder="Email" name="email" required/>
+                <input type="password" placeholder="Password" name="password" required/>
+                <button type="submit" name="buttonType" value="signIn" >Sign In</button>
             </form>
         </div>
 

@@ -11,5 +11,4 @@ window.onload = function init() {
     signInButton.addEventListener('click', () => {
         container.classList.remove("right-panel-active");
     });
-    console.log("HELLO")
 }

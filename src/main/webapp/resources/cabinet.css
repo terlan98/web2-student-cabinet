@@ -1,0 +1,26 @@
+body {
+    background: #9313ff;
+    display: flex;
+    /*justify-content: center;*/
+    /*align-items: flex-start;*/
+    /*flex-direction: column;*/
+    font-family: 'Montserrat', sans-serif;
+    height: 100vh;
+}
+
+table {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #ffffff;
+    border-radius: 10px;
+    /*width: 50%;*/
+    margin: 1% 0.5% 1%;
+    padding: 0.5%;
+}
+
+td, th {
+    border: 2px solid #646464;
+    border-radius: 5px;
+    text-align: left;
+    padding: 8px;
+}
+
