@@ -14,7 +14,15 @@ import java.util.ArrayList;
  */
 public class AccountManager
 {
-	public static boolean createUser(String pass, String email)
+	/**
+	 * Creates a new user with the given parameters and returns the ID of the user.
+	 * Returns -1 if a problem occurs.
+	 *
+	 * @param pass
+	 * @param email
+	 * @return
+	 */
+	public static int createUser(String pass, String email)
 	{
 		pass = HashManager.hash(pass);
 		
@@ -32,13 +40,52 @@ public class AccountManager
 		} catch (SQLException e)
 		{
 			e.printStackTrace();
-			return false;
+			return -1;
 		} finally
 		{
 			closeConnection(connection);
 		}
 		
-		return true;
+		return getUserId(email);
+	}
+	
+	/**
+	 * Returns the id of the user based on email.
+	 *
+	 * @param email email of the user
+	 * @return
+	 */
+	private static int getUserId(String email)
+	{
+		String query = "select user_id from users where email = ?";
+		int id = -1;
+		Connection connection = null;
+		ResultSet resultSet = null;
+		
+		try
+		{
+			connection = DBUtils.dataSource.getConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setString(1, email);
+			resultSet = preparedStatement.executeQuery();
+			resultSet.next();
+			id = resultSet.getInt(1);
+		} catch (SQLException e)
+		{
+			e.printStackTrace();
+		} finally
+		{
+			closeConnection(connection);
+			try
+			{
+				if (resultSet != null) resultSet.close();
+			} catch (SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
+		return id;
 	}
 	
 	/**

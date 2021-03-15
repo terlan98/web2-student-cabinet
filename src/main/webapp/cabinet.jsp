@@ -7,6 +7,7 @@
 <head>
     <title>Personal Cabinet</title>
     <link rel="stylesheet" href="resources/cabinet.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
 </head>
 
 <body>
@@ -39,6 +40,13 @@
         <td><b>Gender</b></td>
         <td style="text-transform: capitalize"><c:out value="${sessionScope.gender}"/></td>
     </tr>
+    <tr>
+        <td colspan="2">
+            <form action="/studentCabinet/cabinet" method="post">
+            <button class="courseButton editButton" name="buttonType" value="edit"><i class="fas fa-user-edit"></i> Edit</button>
+            </form>
+        </td>
+    </tr>
 </table>
 
 
@@ -53,10 +61,14 @@
             <td>
                 <form action="/studentCabinet/cabinet" method="post">
                     <c:if test="${!element.enrolled}">
-                        <button class="courseButton addButton" name="buttonType" value="+#<c:out value="${element.id}"/>">Add Course</button>
+                        <button class="courseButton addButton" name="buttonType"
+                                value="+#<c:out value="${element.id}"/>">Add Course
+                        </button>
                     </c:if>
                     <c:if test="${element.enrolled}">
-                        <button class="courseButton deleteButton" name="buttonType" value="-#<c:out value="${element.id}"/>">Remove Course</button>
+                        <button class="courseButton deleteButton" name="buttonType"
+                                value="-#<c:out value="${element.id}"/>">Remove Course
+                        </button>
                     </c:if>
                 </form>
             </td>

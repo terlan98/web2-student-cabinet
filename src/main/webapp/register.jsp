@@ -17,17 +17,32 @@
     <div class="form-container registration-container">
         <form action="/studentCabinet/register" method="POST">
 
-            <h1>Registration</h1>
+            <c:if test="${sessionScope.registrationState == 'register'}">
+                <h1>Register</h1>
+            </c:if>
+            <c:if test="${sessionScope.registrationState == 'edit'}">
+                <h1>Edit Profile</h1>
+            </c:if>
 
-            <input type="text" placeholder="First Name" name="firstName" required />
-            <input type="text" placeholder="Last Name" name="lastName" required />
-            <input type="number" min="1" placeholder="Age" name="age" required />
-            <input type="text" placeholder="City" name="city" required />
-            <input type="text" placeholder="Country" name="country" required />
-            <select placeholder="Gender" name="gender" required>
-                <option value="" disabled selected>Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
+            <input type="text" placeholder="First Name" name="firstName" value="${sessionScope.fName}" required />
+            <input type="text" placeholder="Last Name" name="lastName" value="${sessionScope.lName}" required />
+            <input type="number" min="1" placeholder="Age" name="age" value="${sessionScope.age}" required />
+            <input type="text" placeholder="City" name="city" value="${sessionScope.city}" required />
+            <input type="text" placeholder="Country" name="country" value="${sessionScope.country}" required />
+            <select placeholder="Gender" name="gender"  required>
+                <c:if test="${sessionScope.gender.equals('male')}">
+                    <option value="male" selected>Male</option>
+                    <option value="female">Female</option>
+                </c:if>
+                <c:if test="${sessionScope.gender.equals('female')}">
+                    <option value="male" selected>Female</option>
+                    <option value="female">Male</option>
+                </c:if>
+                <c:if test="${sessionScope.gender == null}">
+                    <option value="" disabled selected>Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </c:if>
             </select>
 
             <button>Submit</button>

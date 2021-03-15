@@ -63,3 +63,10 @@ form{
     border: 2px solid #c13434;
     color: white;
 }
+
+.editButton {
+    background-color: #ff8417;
+    border: 2px solid #ff8417;
+    font-size: 1em;
+    color: white;
+}

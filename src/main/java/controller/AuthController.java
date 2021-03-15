@@ -41,10 +41,6 @@ public class AuthController extends HttpServlet
 		String password = req.getParameter("password");
 		String buttonType = req.getParameter("buttonType");
 		
-		System.out.println(email);
-		System.out.println(password);
-		System.out.println(buttonType);
-		
 		switch (buttonType)
 		{
 			// SIGN IN
@@ -64,6 +60,7 @@ public class AuthController extends HttpServlet
 						session.setAttribute(AttributeNames.CITY_ATTR, user.getCity());
 						session.setAttribute(AttributeNames.COUNTRY_ATTR, user.getCountry());
 						session.setAttribute(AttributeNames.GENDER_ATTR, user.getGender());
+						session.setAttribute(AttributeNames.EMAIL_ATTR, email);
 					}
 					else // couldn't find user data
 					{
@@ -83,14 +80,18 @@ public class AuthController extends HttpServlet
 			
 			// SIGN UP
 			case "signUp":
+				int userId = -1;
+				
 				if (AccountManager.isUserRegistered(email)) // If the user is already registered
 				{
 					System.out.println("Already registered");
 					resp.sendRedirect(req.getContextPath() + "/auth");
 				}
-				else if (AccountManager.createUser(password, email)) // If the user is created successfully
+				else if ((userId = AccountManager.createUser(password, email)) != -1) // If the user is created successfully
 				{
 					session.setAttribute(AttributeNames.EMAIL_ATTR, email);
+					session.setAttribute(AttributeNames.REG_STATE_ATTR, "register");
+					session.setAttribute(AttributeNames.USER_ID_ATTR, userId);
 					
 					resp.sendRedirect(req.getContextPath() + "/register");
 				}
