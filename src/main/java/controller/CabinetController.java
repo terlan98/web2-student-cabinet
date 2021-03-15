@@ -20,7 +20,7 @@ public class CabinetController extends HttpServlet
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
 		int userId = (int) req.getSession().getAttribute(AttributeNames.USER_ID_ATTR);
-		System.out.println("Opening the cabinet of the user with id: " + userId);
+		
 		courses = CourseManager.getCourses(userId);
 		
 		req.getSession().setAttribute(AttributeNames.COURSE_LIST_ATTR, courses);

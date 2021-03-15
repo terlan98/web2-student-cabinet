@@ -22,7 +22,7 @@ public class AuthController extends HttpServlet
 		System.out.println("AuthController Received GET Request...");
 		HttpSession session = req.getSession();
 		
-		if(session.getAttribute(AttributeNames.USER_ID_ATTR) != null) // User already logged in, redirect to cabinet
+		if (session.getAttribute(AttributeNames.USER_ID_ATTR) != null) // User already logged in, redirect to cabinet
 		{
 			resp.sendRedirect(req.getContextPath() + "/cabinet");
 		}
@@ -65,6 +65,7 @@ public class AuthController extends HttpServlet
 					else // couldn't find user data
 					{
 						System.out.println("User data not found");
+						session.setAttribute(AttributeNames.ERR_MSG_ATTR, "User not found");
 						resp.sendRedirect(req.getContextPath() + "/auth");
 						return;
 					}
@@ -74,6 +75,7 @@ public class AuthController extends HttpServlet
 				else
 				{
 					System.out.println("User not found");
+					session.setAttribute(AttributeNames.ERR_MSG_ATTR, "User not found");
 					resp.sendRedirect(req.getContextPath() + "/auth");
 				}
 				break;
@@ -85,6 +87,7 @@ public class AuthController extends HttpServlet
 				if (AccountManager.isUserRegistered(email)) // If the user is already registered
 				{
 					System.out.println("Already registered");
+					session.setAttribute(AttributeNames.ERR_MSG_ATTR, "The user is already registered");
 					resp.sendRedirect(req.getContextPath() + "/auth");
 				}
 				else if ((userId = AccountManager.createUser(password, email)) != -1) // If the user is created successfully
@@ -97,6 +100,7 @@ public class AuthController extends HttpServlet
 				}
 				else // If the user couldn't be created for some reason
 				{
+					session.setAttribute(AttributeNames.ERR_MSG_ATTR, "Couldn't create the user");
 					resp.sendRedirect(req.getContextPath() + "/auth");
 				}
 				break;

@@ -11,50 +11,61 @@
 </head>
 
 <body>
-    <script src="resources/auth.js"></script>
+<script src="resources/auth.js"></script>
 
-    <h1 class="container-title">Student Personal Cabinet</h1>
-    <div class="container" id="container">
+<h1 class="container-title">Student Personal Cabinet</h1>
 
-        <div class="form-container sign-up-container">
-            <form action="/studentCabinet/auth" method="POST">
-                <h1>Create Account</h1>
-                <input type="email" placeholder="Email" name="email" required/>
-                <input type="password" placeholder="Password" name="password" required/>
-                <button type="submit" name="buttonType" value="signUp" >Sign Up</button>
-            </form>
-        </div>
+<div class="container" id="container">
 
-        <div class="form-container registration-container">
-            <form action="/studentCabinet/auth" method="POST">
-                <h1>Sign in</h1>
-                <input type="email" placeholder="Email" name="email" required/>
-                <input type="password" placeholder="Password" name="password" required/>
-                <button type="submit" name="buttonType" value="signIn" >Sign In</button>
-            </form>
-        </div>
+    <div class="form-container sign-up-container">
+        <form action="/studentCabinet/auth" method="POST">
+            <h1>Create Account</h1>
+            <input type="email" placeholder="Email" name="email" required/>
+            <input type="password" placeholder="Password" name="password" required/>
+            <button type="submit" name="buttonType" value="signUp">Sign Up</button>
+        </form>
+    </div>
 
-        <div class="overlay-container">
-            <div class="overlay">
-                <div class="overlay-panel overlay-left">
-                    <h1>Welcome Back!</h1>
-                    <p>Already have an account? Sign in to access your personal cabinet</p>
-                    <button class="ghost" id="signIn">Sign In</button>
-                </div>
-                <div class="overlay-panel overlay-right">
-                    <h1>Hello!</h1>
-                    <p>Don't have an account? Sign up and start using your personal cabinet</p>
-                    <button class="ghost" id="signUp">Sign Up</button>
-                </div>
+    <div class="form-container registration-container">
+        <form action="/studentCabinet/auth" method="POST">
+            <h1>Sign in</h1>
+            <input type="email" placeholder="Email" name="email" required/>
+            <input type="password" placeholder="Password" name="password" required/>
+            <button type="submit" name="buttonType" value="signIn">Sign In</button>
+        </form>
+    </div>
+
+    <div class="overlay-container">
+        <div class="overlay">
+            <div class="overlay-panel overlay-left">
+                <h1>Welcome Back!</h1>
+                <p>Already have an account? Sign in to access your personal cabinet</p>
+                <button class="ghost" id="signIn">Sign In</button>
+            </div>
+            <div class="overlay-panel overlay-right">
+                <h1>Hello!</h1>
+                <p>Don't have an account? Sign up and start using your personal cabinet</p>
+                <button class="ghost" id="signUp">Sign Up</button>
             </div>
         </div>
     </div>
+</div>
 
-    <footer>
-        <p>
-            Created with <i class="fa fa-heart"></i> by Tarlan Ismayilsoy
-        </p>
-    </footer>
+<footer>
+    <p>
+        Created with <i class="fa fa-heart"></i> by Tarlan Ismayilsoy
+    </p>
+</footer>
+
+
+<%--SHOW ERRROR MESSAGES (IF ANY)--%>
+<c:if test="${sessionScope.errMsg != null}">
+    <script>
+        alert("${sessionScope.errMsg}");
+    </script>
+    <c:set var="errMsg" scope="session" value="${null}"/>
+</c:if>
+
 </body>
 
 </html>
