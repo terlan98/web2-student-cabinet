@@ -5,6 +5,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class DBUtils
 {
@@ -27,8 +28,16 @@ public class DBUtils
 		}
 	}
 	
-	public static ResultSet execQuery(String sql)
+	/**
+	 * Executes the given query and returns 2 objects: ResultSet and Connection.
+	 * These objects must be closed by the callee.
+	 * @param sql query to be executed
+	 * @return An arraylist containing a ResultSet and Connection.
+	 */
+	public static ArrayList<Object> execQuery(String sql)
 	{
+		ArrayList<Object> resultList = new ArrayList<>();
+		
 		try
 		{
 			Connection connection = dataSource.getConnection();
@@ -37,8 +46,8 @@ public class DBUtils
 			
 			if (result)
 			{
-				ResultSet resultSet = statement.getResultSet();
-				return resultSet;
+				resultList.add(statement.getResultSet());
+				resultList.add(connection);
 			}
 			else
 			{
@@ -49,7 +58,7 @@ public class DBUtils
 			e.printStackTrace();
 		}
 		
-		return null;
+		return resultList;
 	}
 	
 }

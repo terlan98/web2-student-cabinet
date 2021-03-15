@@ -12,6 +12,7 @@ import java.io.IOException;
 
 public class RegistrationController extends HttpServlet
 {
+	private static String userId = "";
 	private static String userEmail = "";
 	private static String firstName = "";
 	private static String lastName = "";
@@ -44,6 +45,7 @@ public class RegistrationController extends HttpServlet
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
+		userId = req.getParameter("user_id");
 		firstName = req.getParameter("firstName");
 		lastName = req.getParameter("lastName");
 		age = req.getParameter("age");
@@ -73,6 +75,7 @@ public class RegistrationController extends HttpServlet
 	private void saveUserToSession(HttpServletRequest req)
 	{
 		HttpSession session = req.getSession();
+		session.setAttribute(AttributeNames.USER_ID_ATTR, userId);
 		session.setAttribute(AttributeNames.FIRST_NAME_ATTR, firstName);
 		session.setAttribute(AttributeNames.LAST_NAME_ATTR, lastName);
 		session.setAttribute(AttributeNames.AGE_ATTR, age);

@@ -1,24 +1,30 @@
 package util;
 
+import model.Course;
+import model.User;
+
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * Communicates with the DBUtils to handle account-related data
  */
 public class AccountManager
 {
-	private AccountManager()
+	public static boolean createUser(String pass, String email)
 	{
-	}
-	
-	public static void createUser(String pass, String email)
-	{
+		pass = HashManager.hash(pass);
+		
 		String query = "insert into users (password, email) values (?, ?)";
+		
+		Connection connection = null;
 		try
 		{
-			PreparedStatement preparedStatement = DBUtils.dataSource.getConnection().prepareStatement(query);
+			connection = DBUtils.dataSource.getConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setString(1, pass);
 			preparedStatement.setString(2, email);
 			preparedStatement.executeUpdate();
@@ -26,7 +32,13 @@ public class AccountManager
 		} catch (SQLException e)
 		{
 			e.printStackTrace();
+			return false;
+		} finally
+		{
+			closeConnection(connection);
 		}
+		
+		return true;
 	}
 	
 	/**
@@ -43,9 +55,13 @@ public class AccountManager
 	public static void setUserData(String email, String firstName, String lastName, int age, String city, String country, String gender)
 	{
 		String query = "update users set first_name = ?, last_name = ?, age = ?, city = ?, country = ?, gender = ? where email = ?";
+		
+		Connection connection = null;
+		
 		try
 		{
-			PreparedStatement preparedStatement = DBUtils.dataSource.getConnection().prepareStatement(query);
+			connection = DBUtils.dataSource.getConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setString(1, firstName);
 			preparedStatement.setString(2, lastName);
 			preparedStatement.setInt(3, age);
@@ -58,27 +74,37 @@ public class AccountManager
 		} catch (SQLException e)
 		{
 			e.printStackTrace();
+		} finally
+		{
+			closeConnection(connection);
 		}
 	}
 	
 	
-	public static ResultSet getUserInfo(String email)
+	public static User getUser(String email)
 	{
 		String query = "select * from users where email = ?";
+		Connection connection = null;
+		User user = null;
 		
 		try
 		{
-			PreparedStatement preparedStatement = DBUtils.dataSource.getConnection().prepareStatement(query);
+			connection = DBUtils.dataSource.getConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setString(1, email);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			
-			return resultSet;
-			
+			user = parseUser(resultSet);
+			resultSet.close();
 		} catch (SQLException e)
 		{
 			e.printStackTrace();
+		} finally
+		{
+			closeConnection(connection);
 		}
-		return null;
+		
+		return user;
 	}
 	
 	/**
@@ -90,20 +116,31 @@ public class AccountManager
 	 */
 	public static boolean isUserRegistered(String email, String pass)
 	{
+		pass = HashManager.hash(pass);
+		
 		String query = "select * from users where password = ? and email = ?";
+		
+		Connection connection = null;
 		
 		try
 		{
-			PreparedStatement preparedStatement = DBUtils.dataSource.getConnection().prepareStatement(query);
+			connection = DBUtils.dataSource.getConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setString(1, pass);
 			preparedStatement.setString(2, email);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			
-			return resultSet.next();
+			boolean result = resultSet.next();
+			resultSet.close();
+			
+			return result;
 			
 		} catch (SQLException e)
 		{
 			e.printStackTrace();
+		} finally
+		{
+			closeConnection(connection);
 		}
 		
 		return false;
@@ -119,19 +156,67 @@ public class AccountManager
 	{
 		String query = "select * from users where email = ?";
 		
+		Connection connection = null;
+		
 		try
 		{
-			PreparedStatement preparedStatement = DBUtils.dataSource.getConnection().prepareStatement(query);
+			connection = DBUtils.dataSource.getConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setString(1, email);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			
-			return resultSet.next();
+			boolean result = resultSet.next();
+			resultSet.close();
 			
+			return result;
+			
+		} catch (SQLException e)
+		{
+			e.printStackTrace();
+		} finally
+		{
+			closeConnection(connection);
+		}
+		
+		return false;
+	}
+	
+	private static void closeConnection(Connection connection)
+	{
+		try
+		{
+			if (connection != null) connection.close();
+		} catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	private static User parseUser(ResultSet resultSet)
+	{
+		try
+		{
+			if (resultSet.next())
+			{
+				int userId = resultSet.getInt(1);
+				String firstName = resultSet.getString(5);
+				String lastName = resultSet.getString(6);
+				int age = resultSet.getInt(7);
+				String city = resultSet.getString(8);
+				String country = resultSet.getString(9);
+				String gender = resultSet.getString(10);
+				
+				return new User(userId, firstName, lastName, age, city, country, gender);
+			}
 		} catch (SQLException e)
 		{
 			e.printStackTrace();
 		}
 		
-		return false;
+		return null;
+	}
+	
+	private AccountManager()
+	{
 	}
 }

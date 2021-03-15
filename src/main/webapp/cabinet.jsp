@@ -12,6 +12,10 @@
 <body>
 <table>
     <tr>
+        <th colspan="2">Account Information</th>
+    </tr>
+
+    <tr>
         <td><b>First Name</b></td>
         <td><c:out value="${sessionScope.fName}"/></td>
     </tr>
@@ -36,6 +40,31 @@
         <td style="text-transform: capitalize"><c:out value="${sessionScope.gender}"/></td>
     </tr>
 </table>
+
+
+<table>
+    <tr>
+        <th colspan="2">Courses</th>
+    </tr>
+
+    <c:forEach var="element" items="${sessionScope.courses}">
+        <tr>
+            <td><b>${element.name}</b></td>
+            <td>
+                <form action="/studentCabinet/cabinet" method="post">
+                    <c:if test="${!element.enrolled}">
+                        <button class="courseButton addButton" name="buttonType" value="+#<c:out value="${element.id}"/>">Add Course</button>
+                    </c:if>
+                    <c:if test="${element.enrolled}">
+                        <button class="courseButton deleteButton" name="buttonType" value="-#<c:out value="${element.id}"/>">Remove Course</button>
+                    </c:if>
+                </form>
+            </td>
+        </tr>
+    </c:forEach>
+
+</table>
+
 </body>
 
 </html>

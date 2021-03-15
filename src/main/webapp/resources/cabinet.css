@@ -9,7 +9,6 @@ body {
 }
 
 table {
-    font-family: 'Montserrat', sans-serif;
     background-color: #ffffff;
     border-radius: 10px;
     /*width: 50%;*/
@@ -24,3 +23,43 @@ td, th {
     padding: 8px;
 }
 
+th {
+    text-align: center;
+    font-size: 1.5em;
+}
+
+form{
+    margin:0 !important;
+    padding:0;
+}
+
+.courseButton {
+    background-color: white;
+    border: none;
+    border-radius: 5px;
+    color: black;
+    padding: 1em;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    width: 100%;
+}
+
+.addButton {
+    background-color: #4CAF50;
+    border: 2px solid #4CAF50;
+    color: white;
+}
+
+.courseButton:hover {
+    background-color: white;
+    color: black;
+}
+
+.deleteButton {
+    background-color: #c13434;
+    border: 2px solid #c13434;
+    color: white;
+}

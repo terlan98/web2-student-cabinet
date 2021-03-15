@@ -1,29 +1,42 @@
 package controller;
 
+import model.User;
 import util.AccountManager;
 import util.AttributeNames;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@WebServlet("")
 public class AuthController extends HttpServlet
 {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
 		System.out.println("AuthController Received GET Request...");
-		resp.sendRedirect("auth.jsp");
+		HttpSession session = req.getSession();
+		
+		if(session.getAttribute(AttributeNames.USER_ID_ATTR) != null) // User already logged in, redirect to cabinet
+		{
+			resp.sendRedirect(req.getContextPath() + "/cabinet");
+		}
+		else
+		{
+			resp.sendRedirect("auth.jsp");
+		}
 	}
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
+		HttpSession session = req.getSession();
+		
 		String email = req.getParameter("email");
 		String password = req.getParameter("password");
 		String buttonType = req.getParameter("buttonType");
@@ -40,39 +53,17 @@ public class AuthController extends HttpServlet
 				{
 					System.out.println("User is registered. Signing in...");
 					
-					ResultSet userData = AccountManager.getUserInfo(email);
-					if (userData != null) // found user data
+					User user = AccountManager.getUser(email);
+					
+					if (user != null) // found user data
 					{
-						try
-						{
-							userData.next();
-							System.out.println();
-							
-							String firstName = userData.getString("first_name");
-							String lastName = userData.getString("last_name");
-							String age = userData.getString("age");
-							String city = userData.getString("city");
-							String country = userData.getString("country");
-							String gender = userData.getString("gender");
-							
-							if(firstName == null || lastName == null || age == null || city == null || country == null || gender == null)
-							{
-								// TODO: Send the user back to /register to complete registration
-								return;
-							}
-							
-							HttpSession session = req.getSession();
-							session.setAttribute(AttributeNames.FIRST_NAME_ATTR, firstName);
-							session.setAttribute(AttributeNames.LAST_NAME_ATTR, lastName);
-							session.setAttribute(AttributeNames.AGE_ATTR, age);
-							session.setAttribute(AttributeNames.CITY_ATTR, city);
-							session.setAttribute(AttributeNames.COUNTRY_ATTR, country);
-							session.setAttribute(AttributeNames.GENDER_ATTR, gender);
-							
-						} catch (SQLException e)
-						{
-							e.printStackTrace();
-						}
+						session.setAttribute(AttributeNames.USER_ID_ATTR, user.getId());
+						session.setAttribute(AttributeNames.FIRST_NAME_ATTR, user.getFirstName());
+						session.setAttribute(AttributeNames.LAST_NAME_ATTR, user.getLastName());
+						session.setAttribute(AttributeNames.AGE_ATTR, user.getAge());
+						session.setAttribute(AttributeNames.CITY_ATTR, user.getCity());
+						session.setAttribute(AttributeNames.COUNTRY_ATTR, user.getCountry());
+						session.setAttribute(AttributeNames.GENDER_ATTR, user.getGender());
 					}
 					else // couldn't find user data
 					{
@@ -92,22 +83,22 @@ public class AuthController extends HttpServlet
 			
 			// SIGN UP
 			case "signUp":
-				if (AccountManager.isUserRegistered(email))
+				if (AccountManager.isUserRegistered(email)) // If the user is already registered
 				{
 					System.out.println("Already registered");
 					resp.sendRedirect(req.getContextPath() + "/auth");
 				}
-				else
+				else if (AccountManager.createUser(password, email)) // If the user is created successfully
 				{
-					AccountManager.createUser(password, email);
-					
-					HttpSession session = req.getSession();
 					session.setAttribute(AttributeNames.EMAIL_ATTR, email);
 					
 					resp.sendRedirect(req.getContextPath() + "/register");
 				}
+				else // If the user couldn't be created for some reason
+				{
+					resp.sendRedirect(req.getContextPath() + "/auth");
+				}
 				break;
 		}
 	}
-	
 }
