@@ -47,10 +47,16 @@ public class CabinetController extends HttpServlet
 			System.out.println("Taking course with id: " + courseId);
 			CourseManager.enroll(userId, courseId);
 		}
-		else // Editing account details
+		else if (buttonType.equals("edit")) // Editing account details
 		{
 			req.getSession().setAttribute(AttributeNames.REG_STATE_ATTR, "edit");
 			resp.sendRedirect(req.getContextPath() + "/register");
+			return;
+		}
+		else // Logging out
+		{
+			resetAllAttributes(req.getSession());
+			resp.sendRedirect(req.getContextPath() + "/");
 			return;
 		}
 		
@@ -75,5 +81,19 @@ public class CabinetController extends HttpServlet
 			e.printStackTrace();
 			return -1;
 		}
+	}
+	
+	private void resetAllAttributes(HttpSession session)
+	{
+		session.removeAttribute(AttributeNames.USER_ID_ATTR);
+		session.removeAttribute(AttributeNames.EMAIL_ATTR);
+		session.removeAttribute(AttributeNames.FIRST_NAME_ATTR);
+		session.removeAttribute(AttributeNames.LAST_NAME_ATTR);
+		session.removeAttribute(AttributeNames.AGE_ATTR);
+		session.removeAttribute(AttributeNames.CITY_ATTR);
+		session.removeAttribute(AttributeNames.COUNTRY_ATTR);
+		session.removeAttribute(AttributeNames.GENDER_ATTR);
+		session.removeAttribute(AttributeNames.COURSE_LIST_ATTR);
+		session.removeAttribute(AttributeNames.REG_STATE_ATTR);
 	}
 }

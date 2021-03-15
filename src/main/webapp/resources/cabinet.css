@@ -2,7 +2,7 @@ body {
     background: #9313ff;
     display: flex;
     /*justify-content: center;*/
-    /*align-items: flex-start;*/
+    align-items: flex-start;
     /*flex-direction: column;*/
     font-family: 'Montserrat', sans-serif;
     height: 100vh;
@@ -28,9 +28,15 @@ th {
     font-size: 1.5em;
 }
 
-form{
-    margin:0 !important;
-    padding:0;
+form {
+    margin: 0 !important;
+    padding: 0;
+}
+
+button {
+    outline: none;
+    text-align: center;
+    text-decoration: none;
 }
 
 .courseButton {
@@ -39,8 +45,6 @@ form{
     border-radius: 5px;
     color: black;
     padding: 1em;
-    text-align: center;
-    text-decoration: none;
     display: inline-block;
     transition-duration: 0.4s;
     cursor: pointer;
@@ -69,4 +73,30 @@ form{
     border: 2px solid #ff8417;
     font-size: 1em;
     color: white;
+}
+
+.logOutForm
+{
+    margin-top: 0.5%;
+    margin-right: 0.5%;
+    margin-left: auto !important;
+    display: inline-block;
+    width: 6em;
+}
+
+.logOutButton {
+    background-color: #ee0f0f;
+    border: 2px solid #ee0f0f;
+    border-radius: 5px;
+    color: white;
+    padding: 5%;
+    height: auto;
+    font-size: 1em;
+    display: inline-block;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+.logOutButton:hover {
+    background-color: white;
+    color: black;
 }

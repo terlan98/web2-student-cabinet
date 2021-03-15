@@ -43,7 +43,9 @@
     <tr>
         <td colspan="2">
             <form action="/studentCabinet/cabinet" method="post">
-            <button class="courseButton editButton" name="buttonType" value="edit"><i class="fas fa-user-edit"></i> Edit</button>
+                <button class="courseButton editButton" name="buttonType" value="edit"><i class="fas fa-user-edit"></i>
+                    Edit
+                </button>
             </form>
         </td>
     </tr>
@@ -76,6 +78,10 @@
     </c:forEach>
 
 </table>
+
+<form class="logOutForm" action="/studentCabinet/cabinet" method="post">
+    <button class="logOutButton" name="buttonType" value="logOut"><i class="fas fa-sign-out-alt"></i> Log Out</button>
+</form>
 
 </body>
 
